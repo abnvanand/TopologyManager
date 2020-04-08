@@ -1,7 +1,7 @@
 from time import sleep
 
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 import healthCheck
 import rest_handler
@@ -23,10 +23,9 @@ def poll():
     for service in services:
         alive = healthCheck.check_health(service)
         if not alive:
-            # TODO: call SLCM
             print("Service ", service.serviceId, "is down.")
-            rest_handler.redeploy_service(service.serviceId)
-            service.redeployRequest = 'true'
+            request_sent = rest_handler.redeploy_service(service)
+            service.redeployRequest = 'true' if request_sent else 'false'
             s.add(service)
             s.commit()
         else:
@@ -35,6 +34,8 @@ def poll():
     s.close()
 
 
-while True:
-    poll()
-    sleep(10)
+if __name__ == "__main__":
+    # TODO Parse config file
+    while True:
+        poll()
+        sleep(10)

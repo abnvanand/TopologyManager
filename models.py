@@ -1,5 +1,5 @@
+from sqlalchemy import Column, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date
 
 Base = declarative_base()
 
@@ -7,6 +7,7 @@ Base = declarative_base()
 class Service(Base):
     __tablename__ = 'topology'
     serviceId = Column(String, primary_key=True)
+    serviceName = Column(String)
     userId = Column(String)
     status = Column(String)
     port = Column(String)
