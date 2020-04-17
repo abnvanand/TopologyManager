@@ -21,7 +21,7 @@ def isOpen(ip, port):
 
 
 def check_health(service):
-    if service.userId == "admin":
+    if service.username == "admin":
         return isOpen(service.ip, service.port)
     else:
         # TODO: Hit docker api

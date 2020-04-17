@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 import healthCheck
 import rest_handler
-from models import Service
+from models import Service, RedeployRequest
 
 DATABASE_URI = 'postgres+psycopg2://postgres:root@localhost:5432/ias-db'
 
@@ -24,7 +24,12 @@ def poll():
         alive = healthCheck.check_health(service)
         if not alive:
             print("Service ", service.serviceId, "is down.")
-            request_sent = rest_handler.redeploy_service(service)
+            redeployRequest = RedeployRequest(service.serviceId,
+                                              service.serviceName,
+                                              service.username,
+                                              service.applicationName)
+
+            request_sent = rest_handler.redeploy_service(redeployRequest)
             service.redeployRequest = 'true' if request_sent else 'false'
             s.add(service)
             s.commit()
