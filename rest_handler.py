@@ -1,15 +1,6 @@
 def redeploy_service(redeployRequest):
     # TODO: Send request to SLCM
     #  ??? How do I know SLCM's rest endpoint's IP and PORT
-
-    from configparser import ConfigParser
-    cfg = ConfigParser()
-
-    cfg.read('config.ini')
-
-    ip = cfg.get('ServiceLCM', 'serverIp')
-    port = cfg.get('ServiceLCM', 'servicePort')
-
     import requests
     startRequestJson = {"serviceId": redeployRequest.serviceId,
                         "servicename": redeployRequest.servicename,
@@ -19,7 +10,7 @@ def redeploy_service(redeployRequest):
 
     print("Request sent to redeploy service:", redeployRequest)
     print("Request:", startRequestJson)
-    r = requests.post(url=f"http://{ip}:{port}/servicelcm/service/redeploy",
+    r = requests.post(url="http://localhost:8080/servicelcm/service/redeploy",
                       headers={'Content-type': 'application/json'},
                       json=startRequestJson)
 
