@@ -25,17 +25,20 @@ def redeploy_service(redeployRequest):
 def getContainerStatus(service):
     containerId, ip, port = service.containerId, service.ip, service.port
 
+    if containerId is None:
+        print("Container id is missing for service:", service)
+        return False
+
     import requests
 
-    # Get the dataset
     url = f"http://{ip}:{port}/v1.24/containers/{containerId}/json"
     print("URL:", url)
     response = requests.get(url)
     print(response)
-    dict = response.json()
+    if response.status_code >= 400:
+        return False
 
-    # import ipdb
-    # ipdb.set_trace()
+    dict = response.json()
 
     status = dict['State']['Running']
 

@@ -17,8 +17,8 @@ def poll():
     s = Session()
 
     s.execute('SET search_path TO "ias-schema"')
-    services = s.query(Service).filter_by(status='alive')\
-        .filter_by(redeployRequest='false')\
+    services = s.query(Service).filter_by(status='alive') \
+        .filter_by(redeployRequest='false') \
         .all()
 
     print("services list:", services)
@@ -50,5 +50,8 @@ def poll():
 if __name__ == "__main__":
     # TODO Parse config file
     while True:
-        poll()
-        sleep(10)
+        try:
+            poll()
+            sleep(10)
+        except Exception as e:
+            print("Exception:", e)
